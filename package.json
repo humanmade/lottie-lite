@@ -1,0 +1,20 @@
+{
+	"name": "lottie-lite",
+	"private": true,
+	"description": "Lightweight Lottie Files support for image blocks",
+	"main": "src/index.js",
+	"scripts": {
+		"build": "wp-scripts build src/*.js",
+		"start": "wp-scripts start src/*.js",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style --fix",
+		"lint:js": "wp-scripts lint-js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "GPL-2.0-or-later",
+	"dependencies": {
+		"@lottiefiles/dotlottie-web": "^0.31.1",
+		"@wordpress/scripts": "^28.6.0"
+	}
+}
