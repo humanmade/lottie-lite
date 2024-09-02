@@ -74,7 +74,7 @@ add_action( 'init', function () {
  * @param array $block The parsed block.
  * @return string The block content.
  */
-add_filter( 'render_block_core/image', function( string $block_content, array $block ) : string {
+add_filter( 'render_block', function( string $block_content, array $block ) : string {
 	if ( empty( $block['attrs']['lottie'] ) ) {
 		return $block_content;
 	}

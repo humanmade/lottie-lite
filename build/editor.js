@@ -241,6 +241,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const SUPPORTED_BLOCKS = ['core/image', 'core/cover'];
 function useLottie(args = {}) {
   const dotLottie = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const ref = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(canvas => {
@@ -283,7 +284,7 @@ function LottieAnimationPanel(BlockEdit) {
       name,
       setAttributes
     } = props;
-    if (name !== 'core/image') {
+    if (SUPPORTED_BLOCKS.indexOf(name) < 0) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(BlockEdit, {
         ...props
       });
@@ -301,16 +302,16 @@ function LottieAnimationPanel(BlockEdit) {
           icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("img", {
             src: _assets_lottie_logo_png__WEBPACK_IMPORTED_MODULE_6__,
             style: {
-              width: '1em',
-              height: '1em'
+              width: '1.1em',
+              height: '1.1em'
             }
           }),
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Interaction', 'lottie-lite'),
-            value: lottie?.trigger || 'none',
+            value: lottie?.trigger || '',
             options: [{
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Autoplay', 'lottie-lite'),
-              value: 'none'
+              value: ''
             }, {
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hover', 'lottie-lite'),
               value: 'hover'
@@ -431,7 +432,7 @@ function LottieAnimationPanel(BlockEdit) {
 }
 (0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__.addFilter)('editor.BlockEdit', 'lottie-lite/animation-panel', LottieAnimationPanel);
 function addAttribute(settings) {
-  if (settings.name !== 'core/image') {
+  if (SUPPORTED_BLOCKS.indexOf(settings.name) < 0) {
     return settings;
   }
   return {
@@ -464,8 +465,8 @@ function addAttribute(settings) {
           },
           trigger: {
             type: 'string',
-            enum: ['none', 'click', 'hover'],
-            default: 'none'
+            enum: ['', 'click', 'hover'],
+            default: ''
           },
           overlay: {
             type: 'bool',

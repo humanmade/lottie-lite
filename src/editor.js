@@ -19,6 +19,8 @@ import LottieLogo from '../assets/lottie-logo.png';
 
 import './editor.css';
 
+const SUPPORTED_BLOCKS = [ 'core/image', 'core/cover' ];
+
 function useLottie( args = {} ) {
 	const dotLottie = useRef( null );
 	const ref = useCallback(
@@ -66,7 +68,7 @@ function LottieAnimationPanel( BlockEdit ) {
 	return ( props ) => {
 		const { attributes, name, setAttributes } = props;
 
-		if ( name !== 'core/image' ) {
+		if ( SUPPORTED_BLOCKS.indexOf( name ) < 0 ) {
 			return <BlockEdit { ...props } />;
 		}
 
@@ -88,11 +90,11 @@ function LottieAnimationPanel( BlockEdit ) {
 					>
 						<SelectControl
 							label={ __( 'Interaction', 'lottie-lite' ) }
-							value={ lottie?.trigger || 'none' }
+							value={ lottie?.trigger || '' }
 							options={ [
 								{
 									label: __( 'Autoplay', 'lottie-lite' ),
-									value: 'none',
+									value: '',
 								},
 								{
 									label: __( 'Hover', 'lottie-lite' ),
@@ -282,7 +284,7 @@ addFilter(
 );
 
 function addAttribute( settings ) {
-	if ( settings.name !== 'core/image' ) {
+	if ( SUPPORTED_BLOCKS.indexOf( settings.name ) < 0 ) {
 		return settings;
 	}
 
@@ -317,8 +319,8 @@ function addAttribute( settings ) {
 					},
 					trigger: {
 						type: 'string',
-						enum: [ 'none', 'click', 'hover' ],
-						default: 'none',
+						enum: [ '', 'click', 'hover' ],
+						default: '',
 					},
 					overlay: {
 						type: 'bool',

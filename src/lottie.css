@@ -1,12 +1,12 @@
-.wp-block-image[data-lottie] {
+[data-lottie] {
 	position: relative;
 }
 
-.wp-block-image.lottie-img-hidden img {
+[data-lottie].lottie-img-hidden img {
 	visibility: hidden;
 }
 
-.wp-block-image[data-lottie] canvas {
+[data-lottie] canvas {
 	position: absolute;
 	inset: 0 0 0 0;
 	width: 100%;

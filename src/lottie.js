@@ -13,7 +13,8 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 	canvas.style.width =
 		img?.width || img?.getBoundingClientRect().width || '100%';
 	canvas.style.height =
-		img?.height || img?.getBoundingClientRect().height || '100%';
+		img?.height || img?.getBoundingClientRect().height || 'auto';
+	canvas.style.aspectRatio = `${ img.width } / ${ img.height }`;
 
 	// Append - ensure if a link is used the canvas is inside to pick up clickable area.
 	img.parentElement.appendChild( canvas );
@@ -28,7 +29,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	let playerConfig = {};
 
-	if ( config.trigger === 'none' ) {
+	if ( ! config.trigger ) {
 		playerConfig.autoplay = true;
 		playerConfig.loop = true;
 	}
