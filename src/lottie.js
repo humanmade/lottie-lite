@@ -6,15 +6,21 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 	const config = JSON.parse( lottie.dataset.lottie );
 	const img = lottie.querySelector( 'img' );
 
+	if ( ! img ) {
+		return;
+	}
+
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
-	canvas.className = img?.className || '';
 	canvas.id = config.id;
-	canvas.style.width =
-		img?.width || img?.getBoundingClientRect().width || '100%';
-	canvas.style.height =
-		img?.height || img?.getBoundingClientRect().height || 'auto';
-	canvas.style.aspectRatio = `${ img.width } / ${ img.height }`;
+	canvas.className = img.className || '';
+	const pxWidth = img.width || img.getBoundingClientRect().width || 0;
+	const pxHeight = img.height || img.getBoundingClientRect().height || 0;
+	canvas.width = pxWidth;
+	canvas.height = pxHeight;
+	if ( pxWidth && pxHeight ) {
+		canvas.style.aspectRatio = `${ pxWidth } / ${ pxHeight }`;
+	}
 
 	// Append - ensure if a link is used the canvas is inside to pick up clickable area.
 	img.parentElement.appendChild( canvas );
