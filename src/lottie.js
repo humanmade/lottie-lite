@@ -72,11 +72,11 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			}
 
 			if ( config.trigger === 'hover' ) {
-				canvas.addEventListener( 'mouseenter', () => {
+				canvas.addEventListener( 'mouseover', () => {
 					dotLottie.setMode( 'forward' );
 					dotLottie.play();
 				} );
-				canvas.addEventListener( 'mouseleave', () => {
+				canvas.addEventListener( 'mouseout', () => {
 					dotLottie.setMode( 'reverse' );
 				} );
 			}
