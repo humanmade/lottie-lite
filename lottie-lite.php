@@ -82,7 +82,7 @@ add_filter( 'render_block', function( string $block_content, array $block ) : st
 	// Only enqueue if we have a lottie file.
 	wp_enqueue_script( 'lottie-lite' );
 
-	usort( $block['attrs']['lottie']['breakpoints'] ?? [], function ( $a, $b ) {
+	usort( $block['attrs']['lottie']['breakpoints'], function ( $a, $b ) {
 		return $a['minWidth'] <=> $b['minWidth'];
 	} );
 
