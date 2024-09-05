@@ -12,5 +12,11 @@
 	width: 100%;
 	height: auto;
 	max-width: 100%;
-	z-index: 2; /* Modest z-index by default, but may need to be overridden for other cases. */
+	/* Modest z-index by default for overlay, but may need to be overridden for other cases. */
+	z-index: 2;
+}
+
+.wp-block-cover[data-lottie] .wp-block-cover__inner-container,
+.wp-block-cover-image[data-lottie] .wp-block-cover__inner-container {
+	z-index: 3;
 }
