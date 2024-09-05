@@ -75,14 +75,14 @@ add_action( 'init', function () {
  * @return string The block content.
  */
 add_filter( 'render_block', function( string $block_content, array $block ) : string {
-	if ( empty( $block['attrs']['lottie'] ) ) {
+	if ( empty( $block['attrs']['lottie'] ) || empty( $block['attrs']['lottie']['breakpoints'] ) ) {
 		return $block_content;
 	}
 
 	// Only enqueue if we have a lottie file.
 	wp_enqueue_script( 'lottie-lite' );
 
-	usort( $block['attrs']['lottie']['breakpoints'], function ( $a, $b ) {
+	usort( $block['attrs']['lottie']['breakpoints'] ?? [], function ( $a, $b ) {
 		return $a['minWidth'] <=> $b['minWidth'];
 	} );
 
