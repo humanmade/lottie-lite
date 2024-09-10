@@ -35,11 +35,11 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		lottie.classList.add( 'lottie-img-hidden' );
 	}
 
-	let playerConfig = {};
-
-	if ( ! config.trigger ) {
-		playerConfig.autoplay = true;
-	}
+	let playerConfig = {
+		mode: 'forward',
+		autoplay: false,
+		loop: false,
+	};
 
 	if ( config?.trigger !== 'hover' ) {
 		playerConfig.loop = config?.loop ?? true;
@@ -70,14 +70,21 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 							src: breakpoint.src,
 						} );
 					}
-					console.log( 'unfreeze' );
-					if ( ! started || playerConfig.loop ) {
+
+					if ( ! config.trigger && ! started ) {
 						started = true;
-						dotLottie.play();
+						if ( dotLottie.isLoaded ) {
+							dotLottie.play();
+						} else {
+							dotLottie.addEventListener( 'load', () => {
+								dotLottie.play();
+							} );
+						}
 					}
+
+					dotLottie.unfreeze();
 				} else {
-					console.log( 'freeze' );
-					dotLottie.pause();
+					dotLottie.freeze();
 				}
 			} );
 		},
