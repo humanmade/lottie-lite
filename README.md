@@ -1,6 +1,10 @@
 # Lottie Lite
 
-Adds support for Lottie animations as an enhancement to the core image block.
+Adds support for Lottie animations as an enhancement to the following blocks:
+
+- Core image block
+- Core cover block
+- Core media & text block
 
 Allows overlaying or replacing the image with an animation.
 
