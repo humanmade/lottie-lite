@@ -19,7 +19,7 @@ import LottieLogo from '../assets/lottie-logo.png';
 
 import './editor.css';
 
-const SUPPORTED_BLOCKS = [ 'core/image', 'core/cover' ];
+const SUPPORTED_BLOCKS = [ 'core/image', 'core/cover', 'core/media-text' ];
 
 function useLottie( args = {} ) {
 	const dotLottie = useRef( null );
@@ -123,15 +123,61 @@ function LottieAnimationPanel( BlockEdit ) {
 							help={
 								lottie?.overlay
 									? __(
-											'Animation will be overlaid on image',
+											'Animation will be overlaid on the image',
 											'lottie-lite'
 									  )
 									: __(
-											'Image will be replaced by animation',
+											'The image will be replaced by the animation',
 											'lottie-lite'
 									  )
 							}
 						/>
+						{ lottie?.trigger !== 'hover' && (
+							<ToggleControl
+								label={ __( 'Loop', 'lottie-lite' ) }
+								help={
+									lottie?.loop ?? true
+										? __(
+												'The animation will loop continuously',
+												'lottie-lite'
+										  )
+										: __(
+												'The animation will play only once',
+												'lottie-lite'
+										  )
+								}
+								checked={ lottie?.loop ?? true }
+								defaultChecked={ true }
+								onChange={ ( value ) =>
+									setAttributes( {
+										lottie: { ...lottie, loop: value },
+									} )
+								}
+							/>
+						) }
+						{ lottie?.bounce !== 'hover' && (
+							<ToggleControl
+								label={ __( 'Bounce', 'lottie-lite' ) }
+								help={
+									lottie?.bounce ?? false
+										? __(
+												'The animation will play in reverse once it reaches the end',
+												'lottie-lite'
+										  )
+										: __(
+												'The animation will stop once it reaches the end',
+												'lottie-lite'
+										  )
+								}
+								checked={ lottie?.bounce ?? false }
+								defaultChecked={ false }
+								onChange={ ( value ) =>
+									setAttributes( {
+										lottie: { ...lottie, bounce: value },
+									} )
+								}
+							/>
+						) }
 						{ ( lottie?.breakpoints || [] ).map(
 							( breakpoint, index ) => (
 								<div
@@ -325,6 +371,10 @@ function addAttribute( settings ) {
 					overlay: {
 						type: 'bool',
 						default: false,
+					},
+					loop: {
+						type: 'bool',
+						default: true,
 					},
 				},
 			},

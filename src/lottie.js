@@ -22,6 +22,8 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		canvas.style.aspectRatio = `${ pxWidth } / ${ pxHeight }`;
 	}
 
+	const isLazy = img.loading === 'lazy';
+
 	// Append - ensure if a link is used the canvas is inside to pick up clickable area.
 	img.parentElement.appendChild( canvas );
 
@@ -37,11 +39,54 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	if ( ! config.trigger ) {
 		playerConfig.autoplay = true;
-		playerConfig.loop = true;
+	}
+
+	if ( config?.trigger !== 'hover' ) {
+		playerConfig.loop = config?.loop ?? true;
+	}
+
+	if ( config?.bounce ) {
+		playerConfig.mode = 'bounce';
 	}
 
 	let current = {};
 	let dotLottie;
+	let observer;
+	let loaded = false;
+	let started = false;
+
+	// Only animate when in view.
+	observer = new IntersectionObserver(
+		( entries ) => {
+			entries.forEach( ( entry ) => {
+				if ( ! dotLottie ) {
+					return;
+				}
+
+				if ( entry.isIntersecting ) {
+					if ( ! loaded && isLazy ) {
+						loaded = true;
+						dotLottie.load( {
+							src: breakpoint.src,
+						} );
+					}
+					console.log( 'unfreeze' );
+					if ( ! started || playerConfig.loop ) {
+						started = true;
+						dotLottie.play();
+					}
+				} else {
+					console.log( 'freeze' );
+					dotLottie.pause();
+				}
+			} );
+		},
+		{
+			threshold: [ 0, 1 ],
+		}
+	);
+
+	observer.observe( canvas );
 
 	function setAnimation() {
 		let breakpoint = null;
@@ -59,9 +104,12 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 				dotLottie.destroy();
 			}
 
+			if ( ! isLazy ) {
+				playerConfig.src = breakpoint.src;
+			}
+
 			dotLottie = new DotLottie( {
 				canvas,
-				src: breakpoint.src,
 				...playerConfig,
 			} );
 
@@ -72,11 +120,11 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			}
 
 			if ( config.trigger === 'hover' ) {
-				canvas.addEventListener( 'mouseover', () => {
+				img.parentElement.addEventListener( 'mouseenter', () => {
 					dotLottie.setMode( 'forward' );
 					dotLottie.play();
 				} );
-				canvas.addEventListener( 'mouseout', () => {
+				img.parentElement.addEventListener( 'mouseleave', () => {
 					dotLottie.setMode( 'reverse' );
 				} );
 			}

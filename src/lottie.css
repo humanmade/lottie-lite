@@ -1,4 +1,5 @@
-[data-lottie] {
+[data-lottie],
+[data-lottie] .wp-block-media-text__media {
 	position: relative;
 }
 
