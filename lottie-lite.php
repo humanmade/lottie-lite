@@ -86,6 +86,14 @@ add_filter( 'render_block', function( string $block_content, array $block ) : st
 		return $a['minWidth'] <=> $b['minWidth'];
 	} );
 
+	foreach ( $block['attrs']['lottie']['breakpoints'] as $i => $breakpoint ) {
+		$metadata = wp_get_attachment_metadata( $breakpoint['file'] );
+		if ( isset( $metadata['width'] ) && $metadata['height'] ) {
+			$block['attrs']['lottie']['breakpoints'][ $i ]['width'] = $metadata['width'];
+			$block['attrs']['lottie']['breakpoints'][ $i ]['height'] = $metadata['height'];
+		}
+	}
+
 	$data = wp_parse_args( $block['attrs']['lottie'], [
 		'id' => 'lottie-' . wp_generate_uuid4(),
 	] );
@@ -147,10 +155,9 @@ add_filter( 'wp_prepare_attachment_for_js', function( array $response, \WP_Post 
  *
  * @param array  $metadata      An array of attachment meta data.
  * @param int    $attachment_id Current attachment ID.
- * @param string $context       Additional context. Can be 'create' when metadata was initially created for new attachment or 'update' when the metadata was updated.
  * @return array An array of attachment meta data.
  */
-add_filter( 'wp_generate_attachment_metadata', function( array $metadata, int $attachment_id, string $context ) : array {
+add_filter( 'wp_generate_attachment_metadata', function( array $metadata, int $attachment_id ) : array {
 	$file = get_attached_file( $attachment_id );
 	$ext = pathinfo( $file, PATHINFO_EXTENSION );
 
@@ -160,6 +167,8 @@ add_filter( 'wp_generate_attachment_metadata', function( array $metadata, int $a
 
 		if ( is_object( $json_data ) && property_exists( $json_data, 'v' ) && property_exists( $json_data, 'w' ) && property_exists( $json_data, 'h' ) && property_exists( $json_data, 'fr' ) ) {
 			$metadata['isLottie'] = true;
+			$metadata['width'] = absint( $json_data->w );
+			$metadata['height'] = absint( $json_data->h );
 		}
 
 		// Ensure correct mime type is set after our text/plain hack.

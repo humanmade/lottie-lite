@@ -13,22 +13,11 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
 	canvas.id = config.id;
-	canvas.className = img.className || '';
-	const pxWidth = img.width || img.getBoundingClientRect().width || 0;
-	const pxHeight = img.height || img.getBoundingClientRect().height || 0;
-	canvas.width = pxWidth;
-	canvas.height = pxHeight;
-	if ( pxWidth && pxHeight ) {
-		canvas.style.aspectRatio = `${ pxWidth } / ${ pxHeight }`;
-	}
 
 	const isLazy = img.loading === 'lazy';
 
 	// Append - ensure if a link is used the canvas is inside to pick up clickable area.
 	img.parentElement.appendChild( canvas );
-
-	// Add a styling hook.
-	lottie.classList.add( 'lottie-initialized' );
 
 	// Hide image if not overlaying.
 	if ( ! config.overlay ) {
@@ -51,12 +40,11 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	let current = {};
 	let dotLottie;
-	let observer;
 	let loaded = false;
 	let started = false;
 
 	// Only animate when in view.
-	observer = new IntersectionObserver(
+	const observer = new IntersectionObserver(
 		( entries ) => {
 			entries.forEach( ( entry ) => {
 				if ( ! dotLottie ) {
@@ -93,7 +81,14 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		}
 	);
 
-	observer.observe( canvas );
+	function removeAnimation() {
+		if ( dotLottie ) {
+			started = false;
+			loaded = false;
+			dotLottie.destroy();
+			observer.unobserve( lottie );
+		}
+	}
 
 	function setAnimation() {
 		let breakpoint = null;
@@ -107,12 +102,18 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		if ( breakpoint && current.src !== breakpoint.src ) {
 			current = breakpoint;
 
-			if ( dotLottie ) {
-				dotLottie.destroy();
-			}
+			removeAnimation();
 
 			if ( ! isLazy ) {
-				playerConfig.src = breakpoint.src;
+				playerConfig.src = current.src;
+			}
+
+			// Extract intrinsic width & height.
+			if ( current.width && current.height ) {
+				canvas.style.aspectRatio = `${ breakpoint.width } / ${ breakpoint.height }`;
+			} else {
+				const dims = canvas.getBoundingClientRect();
+				canvas.style.aspectRatio = `${ dims.width } / ${ dims.height }`;
 			}
 
 			dotLottie = new DotLottie( {
@@ -120,8 +121,17 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 				...playerConfig,
 			} );
 
+			// Set a handle on the element.
+			canvas.lottie = dotLottie;
+
+			observer.observe( lottie );
+
+			// Add a styling hook.
+			canvas.className = img.className || '';
+			lottie.classList.add( 'lottie-initialized' );
+
 			if ( config.trigger === 'click' ) {
-				canvas.addEventListener( 'click', () => {
+				img.parentElement.addEventListener( 'click', () => {
 					dotLottie.play();
 				} );
 			}
@@ -137,7 +147,8 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			}
 		}
 
-		if ( ! breakpoint && ! config.overlay ) {
+		if ( ! breakpoint ) {
+			removeAnimation();
 			lottie.classList.remove( 'lottie-img-hidden' );
 		}
 	}
