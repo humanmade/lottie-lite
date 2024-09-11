@@ -55,7 +55,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 					if ( ! loaded && isLazy ) {
 						loaded = true;
 						dotLottie.load( {
-							src: breakpoint.src,
+							src: current.src,
 						} );
 					}
 
