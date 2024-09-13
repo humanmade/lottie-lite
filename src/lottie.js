@@ -47,16 +47,10 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 	const observer = new IntersectionObserver(
 		( entries ) => {
 			entries.forEach( ( entry ) => {
-				if ( ! dotLottie ) {
-					return;
-				}
-
 				if ( entry.isIntersecting ) {
 					if ( ! loaded && isLazy ) {
 						loaded = true;
-						dotLottie.load( {
-							src: current.src,
-						} );
+						setAnimation();
 					}
 
 					if ( ! config.trigger && ! started ) {
@@ -81,12 +75,14 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		}
 	);
 
+	observer.observe( lottie );
+
 	function removeAnimation() {
+		observer.unobserve( lottie );
 		if ( dotLottie ) {
 			started = false;
 			loaded = false;
 			dotLottie.destroy();
-			observer.unobserve( lottie );
 		}
 	}
 
@@ -104,10 +100,6 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 			removeAnimation();
 
-			if ( ! isLazy ) {
-				playerConfig.src = current.src;
-			}
-
 			// Extract intrinsic width & height.
 			if ( current.width && current.height ) {
 				canvas.style.aspectRatio = `${ breakpoint.width } / ${ breakpoint.height }`;
@@ -118,11 +110,13 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 			dotLottie = new DotLottie( {
 				canvas,
+				src: current.src,
 				...playerConfig,
 			} );
 
-			// Set a handle on the element.
+			// Set a JS accessible reference on the elements.
 			canvas.lottie = dotLottie;
+			lottie.lottie = dotLottie;
 
 			observer.observe( lottie );
 
@@ -143,8 +137,11 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 				} );
 				img.parentElement.addEventListener( 'mouseleave', () => {
 					dotLottie.setMode( 'reverse' );
+					dotLottie.play();
 				} );
 			}
+
+			lottie.dispatchEvent( new CustomEvent( 'lottieReady' ) );
 		}
 
 		if ( ! breakpoint ) {
@@ -157,5 +154,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		requestAnimationFrame( setAnimation );
 	} );
 
-	setAnimation();
+	if ( ! isLazy ) {
+		setAnimation();
+	}
 } );
