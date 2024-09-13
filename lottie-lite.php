@@ -57,12 +57,28 @@ add_action( 'wp_enqueue_scripts', function() : void {
 
 add_action( 'init', function () {
 	$asset = require __DIR__ . '/build/lottie.asset.php';
+	wp_register_style(
+		'lottie-lite',
+		plugins_url( 'build/lottie.css', __FILE__ ),
+		[],
+		$asset['version']
+	);
 	wp_enqueue_block_style(
 		'core/image',
 		[
 			'handle' => 'lottie-lite',
-			'src' => plugins_url( 'build/lottie.css', __FILE__ ),
-			'version' => $asset['version'],
+		]
+	);
+	wp_enqueue_block_style(
+		'core/cover',
+		[
+			'handle' => 'lottie-lite',
+		]
+	);
+	wp_enqueue_block_style(
+		'core/media-text',
+		[
+			'handle' => 'lottie-lite',
 		]
 	);
 } );
