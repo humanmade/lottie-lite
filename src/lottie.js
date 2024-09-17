@@ -64,9 +64,13 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 						}
 					}
 
-					dotLottie.unfreeze();
+					if ( dotLottie ) {
+						dotLottie.unfreeze();
+					}
 				} else {
-					dotLottie.freeze();
+					if ( dotLottie ) {
+						dotLottie.freeze();
+					}
 				}
 			} );
 		},
