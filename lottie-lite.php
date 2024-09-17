@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Lottie Lite
  * Description: Extends image blocks with support for Lottie Animations.
- * Version: 1.2.4
+ * Version: 1.2.5
  * Author: Human Made Limited
  * Author URI: https://humanmade.com
  * License: GPL-2.0+
