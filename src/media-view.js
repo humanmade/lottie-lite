@@ -22,6 +22,7 @@ wp.media.view.Attachment.Library = AttachmentView.extend( {
 		canvas.style.position = 'absolute';
 		canvas.style.inset = '0 0 0 0';
 		canvas.style.backgroundColor = '#fff';
+		img.parentElement.style.minWidth = '150px';
 		img.parentElement.appendChild( canvas );
 		img.parentElement.removeChild( img );
 
