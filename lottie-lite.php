@@ -129,11 +129,13 @@ add_filter( 'render_block', function( string $block_content, array $block ) : st
  */
 add_filter( 'upload_mimes', function( $mime_types ) {
 	$mime_types['json'] = 'text/plain'; // This is needed to allow uploading the file type.
+	$mime_types['json'] = 'application/json'; // This is needed to allow uploading the file type.
 	$mime_types['lottie'] = 'application/zip';
 	return $mime_types;
 } );
 add_filter( 'mime_types', function( $mime_types ) {
 	$mime_types['json'] = 'text/plain';
+	$mime_types['json'] = 'application/json';
 	$mime_types['lottie'] = 'application/zip';
 	return $mime_types;
 } );
