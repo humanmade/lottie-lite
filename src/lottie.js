@@ -10,9 +10,19 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		return;
 	}
 
+	// Accessibility: Detect prefers-reduced-motion
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if (prefersReducedMotion) {
+		// Show static image, do not initialize animation
+		lottie.classList.remove('lottie-img-hidden');
+		return;
+	}
+
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
 	canvas.id = config.id;
+	// Accessibility: Hide animation from assistive tech
+	canvas.setAttribute('aria-hidden', 'true');
 
 	const isLazy = img.loading === 'lazy';
 
