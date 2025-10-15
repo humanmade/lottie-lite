@@ -42,16 +42,25 @@ add_action( 'wp_enqueue_media', function() : void {
 
 add_action( 'wp_enqueue_scripts', function() : void {
 	$asset = require __DIR__ . '/build/lottie.asset.php';
+	// Enqueue LottieInteractivity first
+	wp_register_script(
+		'lottie-interactivity',
+		'https://unpkg.com/@lottiefiles/lottie-interactivity@latest/dist/lottie-interactivity.min.js',
+		[],
+		null,
+		true
+	);
 	wp_register_script(
 		'lottie-lite',
 		plugins_url( 'build/lottie.js', __FILE__ ),
-		$asset['dependencies'],
+		array_merge( $asset['dependencies'], [ 'lottie-interactivity' ] ),
 		$asset['version'],
 		[
 			'strategy' => 'async',
 			'in_footer' => true,
 		]
 	);
+	wp_enqueue_script('lottie-interactivity');
 } );
 
 add_action( 'init', function () {
