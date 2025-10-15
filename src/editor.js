@@ -104,6 +104,10 @@ function LottieAnimationPanel( BlockEdit ) {
 									label: __( 'Click', 'lottie-lite' ),
 									value: 'click',
 								},
+								{
+									label: __( 'Scroll', 'lottie-lite' ),
+									value: 'scroll',
+								},
 							] }
 							onChange={ ( value ) =>
 								setAttributes( {

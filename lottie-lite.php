@@ -199,3 +199,25 @@ add_filter( 'wp_generate_attachment_metadata', function( array $metadata, int $a
 
 	return $metadata;
 }, 10, 3  );
+
+// Enqueue GSAP and ScrollTrigger if any Lottie block uses scroll trigger
+add_action( 'wp_enqueue_scripts', function() {
+	global $post;
+	if ( ! is_a( $post, 'WP_Post' ) ) return;
+	if ( strpos( $post->post_content, '"trigger":"scroll"' ) !== false ) {
+		wp_enqueue_script(
+			'gsap',
+			'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js',
+			[],
+			'3.12.5',
+			true
+		);
+		wp_enqueue_script(
+			'gsap-scrolltrigger',
+			'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js',
+			[ 'gsap' ],
+			'3.12.5',
+			true
+		);
+	}
+});
