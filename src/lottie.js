@@ -10,6 +10,9 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		return;
 	}
 
+	// Check if this is a cover block
+	const isCoverBlock = lottie.classList.contains( 'wp-block-cover' );
+
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
 	canvas.id = config.id;
@@ -105,18 +108,38 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			removeAnimation();
 
 			// Extract intrinsic width & height.
-			if ( current.width && current.height ) {
-				canvas.style.aspectRatio = `${ breakpoint.width } / ${ breakpoint.height }`;
-			} else {
-				const dims = canvas.getBoundingClientRect();
-				canvas.style.aspectRatio = `${ dims.width } / ${ dims.height }`;
+			// For cover blocks, don't set aspect ratio - let it fill the container
+			if ( ! isCoverBlock ) {
+				if ( current.width && current.height ) {
+					canvas.style.aspectRatio = `${ breakpoint.width } / ${ breakpoint.height }`;
+				} else {
+					const dims = canvas.getBoundingClientRect();
+					canvas.style.aspectRatio = `${ dims.width } / ${ dims.height }`;
+				}
 			}
 
-			dotLottie = new DotLottie( {
+			// For cover blocks, use 'cover' fit to fill the entire canvas
+			const lottieConfig = {
 				canvas,
 				src: current.src,
 				...playerConfig,
-			} );
+			};
+
+			if ( isCoverBlock ) {
+				lottieConfig.layout = {
+					fit: 'cover',
+					align: [ 0.5, 0.5 ],
+				};
+				lottieConfig.renderConfig = {
+					devicePixelRatio: window.devicePixelRatio || 1,
+				};
+				// Set canvas to match container dimensions
+				const rect = canvas.getBoundingClientRect();
+				canvas.width = rect.width;
+				canvas.height = rect.height;
+			}
+
+			dotLottie = new DotLottie( lottieConfig );
 
 			// Set a JS accessible reference on the elements.
 			canvas.lottie = dotLottie;
