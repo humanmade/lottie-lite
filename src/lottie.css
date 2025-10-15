@@ -1,13 +1,13 @@
-.wp-site-blocks [data-lottie],
-.wp-site-blocks [data-lottie] .wp-block-media-text__media {
+[class*="wp-block-"][data-lottie],
+[class*="wp-block-"][data-lottie] .wp-block-media-text__media {
 	position: relative;
 }
 
-.wp-site-blocks [data-lottie].lottie-img-hidden img {
+[class*="wp-block-"][data-lottie].lottie-img-hidden img {
 	visibility: hidden;
 }
 
-.wp-site-blocks [data-lottie] canvas {
+[class*="wp-block-"][data-lottie] canvas {
 	opacity: 0;
 	position: absolute;
 	top: 50%;
@@ -18,7 +18,7 @@
 	max-height: 100%;
 }
 
-.wp-site-blocks .wp-block-cover[data-lottie] canvas {
+.wp-block-cover[data-lottie] canvas {
 	object-fit: cover;
 	z-index: 0;
 	width: 100%;
@@ -30,10 +30,10 @@
 	translate: none;
 }
 
-.wp-site-blocks .wp-block-cover[data-lottie] .wp-block-cover__inner-container {
+.wp-block-cover[data-lottie] .wp-block-cover__inner-container {
 	z-index: 1;
 }
 
-.wp-site-blocks [data-lottie].lottie-initialized canvas {
+[class*="wp-block-"][data-lottie].lottie-initialized canvas {
 	opacity: 1;
 }
