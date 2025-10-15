@@ -105,7 +105,7 @@ function LottieAnimationPanel( BlockEdit ) {
 									value: 'click',
 								},
 								{
-									label: __( 'Scroll', 'lottie-lite' ),
+									label: __( 'Scroll/GSAP', 'lottie-lite' ),
 									value: 'scroll',
 								},
 							] }
@@ -114,7 +114,45 @@ function LottieAnimationPanel( BlockEdit ) {
 									lottie: { ...lottie, trigger: value },
 								} )
 							}
-						/>
+						/> 
+						{ lottie?.trigger === 'scroll' && (
+							<>
+								<RangeControl
+									label={ __( 'Scroll start (%)', 'lottie-lite' ) }
+									value={ lottie?.scrollStartPct ?? 80 }
+									min={ 0 }
+									max={ 100 }
+									onChange={ ( value ) =>
+										setAttributes( {
+											lottie: { ...lottie, scrollStartPct: value },
+										} )
+									}
+									help={ __( 'Viewport percentage where the animation starts (0% = top, 100% = bottom).', 'lottie-lite' ) }
+								/>
+								<RangeControl
+									label={ __( 'Scroll end (%)', 'lottie-lite' ) }
+									value={ lottie?.scrollEndPct ?? 0 }
+									min={ 0 }
+									max={ 100 }
+									onChange={ ( value ) =>
+										setAttributes( {
+											lottie: { ...lottie, scrollEndPct: value },
+										} )
+									}
+									help={ __( 'Viewport percentage where the animation ends (0% = top, 100% = bottom).', 'lottie-lite' ) }
+								/>
+								<ToggleControl
+									label={ __( 'Sync with scroll (scrub)', 'lottie-lite' ) }
+									checked={ !!lottie?.scrollScrub }
+									onChange={ ( value ) =>
+										setAttributes( {
+											lottie: { ...lottie, scrollScrub: value },
+										} )
+									}
+									help={ __( 'If enabled, the scroll controls the animation progress.', 'lottie-lite' ) }
+								/>
+							</>
+						) }
 						<ToggleControl
 							label={ __( 'Overlay', 'lottie-lite' ) }
 							checked={ lottie?.overlay }
