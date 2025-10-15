@@ -12,11 +12,46 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	// Accessibility: Detect prefers-reduced-motion
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	// Option: config.reducedMotionFallback: 'no-change' | 'show-last-frame' | 'hide'
+	// Default: 'hide' (for backward compatibility)
+	const fallback = config.reducedMotionFallback || 'hide';
 	if (prefersReducedMotion) {
-		// Show static image, do not initialize animation
-		lottie.classList.remove('lottie-img-hidden');
-		return;
-	}
+		if (fallback === 'show-last-frame') {
+			lottie.classList.add('lottie-img-hidden');
+			lottie.classList.add('lottie-lite-reduced-motion-container');
+			const canvas = document.createElement('canvas');
+			canvas.id = config.id;
+			canvas.setAttribute('aria-hidden', 'true');
+			canvas.className = (img.className || '') + ' lottie-lite-reduced-motion-canvas';
+			canvas.style.width = img.style.width || '100%';
+			canvas.style.height = img.style.height || '100%';
+			img.parentElement.appendChild(canvas);
+			let breakpoint = null;
+			config.breakpoints.forEach((bp) => {
+				if (bp.minWidth < window.innerWidth) {
+					breakpoint = bp;
+				}
+			});
+			if (breakpoint) {
+				const dotLottie = new DotLottie({
+					canvas,
+					src: breakpoint.src,
+					autoplay: false,
+					loop: false,
+				});
+				dotLottie.addEventListener('load', () => {
+					const lastFrame = dotLottie.totalFrames - 1;
+					dotLottie.setFrame(lastFrame);
+					dotLottie.pause();
+				});
+			}
+			return;
+		}
+		if (fallback === 'hide') {
+			// Show static image, do not initialize animation
+			lottie.classList.remove('lottie-img-hidden');
+			return;
+		}	}
 
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
@@ -36,7 +71,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	let playerConfig = {
 		mode: 'forward',
-		autoplay: false,
+		autoplay: !config.trigger || config.trigger === 'autoplay',
 		loop: false,
 	};
 
