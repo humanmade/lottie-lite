@@ -21,3 +21,7 @@
 [data-lottie].lottie-initialized canvas {
 	opacity: 1;
 }
+
+.lottie-lite-reduced-motion-canvas {
+	opacity: 1 !important;
+}
