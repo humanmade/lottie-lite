@@ -145,6 +145,30 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 				} );
 			}
 
+			// Scroll sync uses LottieInteractivity with editor options
+			if ( config.trigger === 'synced-scroll' && window.LottieInteractivity ) {
+				const startPct = typeof config.syncedScrollStart === 'number' ? config.syncedScrollStart / 100 : 0;
+				const endPct = typeof config.syncedScrollEnd === 'number' ? config.syncedScrollEnd / 100 : 1;
+				const runInteractivity = () => {
+					window.LottieInteractivity.create({
+						player: canvas,
+						mode: 'scroll',
+						actions: [
+							{
+								visibility: [startPct, endPct],
+								type: 'seek',
+								frames: [0, dotLottie.totalFrames - 1],
+							},
+						],
+					});
+				};
+				if (dotLottie.isLoaded) {
+					runInteractivity();
+				} else {
+					dotLottie.addEventListener('load', runInteractivity);
+				}
+			}
+
 			lottie.dispatchEvent( new CustomEvent( 'lottieReady' ) );
 		}
 
