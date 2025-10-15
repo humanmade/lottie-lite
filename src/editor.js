@@ -111,6 +111,30 @@ function LottieAnimationPanel( BlockEdit ) {
 								} )
 							}
 						/>
+						<SelectControl
+							label={ __( 'Reduced animation fallback', 'lottie-lite' ) }
+							value={ lottie?.reducedMotionFallback || 'hide' }
+							options={ [
+								{
+									label: __( 'No change (always show animation)', 'lottie-lite' ),
+									value: 'no-change',
+								},
+								{
+									label: __( 'Show last frame (static)', 'lottie-lite' ),
+									value: 'show-last-frame',
+								},
+								{
+									label: __( 'Hide animation (show image only)', 'lottie-lite' ),
+									value: 'hide',
+								},
+							] }
+							onChange={ ( value ) =>
+								setAttributes( {
+									lottie: { ...lottie, reducedMotionFallback: value },
+								} )
+							}
+							help={ __( 'Fallback for users with "prefers-reduced-motion" enabled.', 'lottie-lite' ) }
+						/>
 						<ToggleControl
 							label={ __( 'Overlay', 'lottie-lite' ) }
 							checked={ lottie?.overlay }
@@ -334,55 +358,61 @@ function addAttribute( settings ) {
 		return settings;
 	}
 
-	return {
-		...settings,
-		attributes: {
-			...settings.attributes,
-			lottie: {
-				type: 'object',
-				properties: {
-					breakpoints: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								file: {
-									type: 'number',
-									description: 'The Lottie file ID',
-								},
-								src: {
-									type: 'string',
-									description: 'The Lottie file URL',
-								},
-								minWidth: {
-									type: 'number',
-									description:
-										'The size at which to stop showing animation',
-									default: 0,
-								},
-							},
-						},
-					},
-					trigger: {
-						type: 'string',
-						enum: [ '', 'click', 'hover' ],
-						default: '',
-					},
-					overlay: {
-						type: 'bool',
-						default: false,
-					},
-					loop: {
-						type: 'bool',
-						default: true,
-					},
-				},
-			},
-			lottieFile: {
-				type: 'number',
-			},
-		},
-	};
+	   return {
+		   ...settings,
+		   attributes: {
+			   ...settings.attributes,
+			   lottie: {
+				   type: 'object',
+				   properties: {
+					   breakpoints: {
+						   type: 'array',
+						   items: {
+							   type: 'object',
+							   properties: {
+								   file: {
+									   type: 'number',
+									   description: 'The Lottie file ID',
+								   },
+								   src: {
+									   type: 'string',
+									   description: 'The Lottie file URL',
+								   },
+								   minWidth: {
+									   type: 'number',
+									   description:
+										   'The size at which to stop showing animation',
+									   default: 0,
+								   },
+							   },
+						   },
+					   },
+					   trigger: {
+						   type: 'string',
+						   enum: [ '', 'click', 'hover' ],
+						   default: '',
+					   },
+					   overlay: {
+						   type: 'bool',
+						   default: false,
+					   },
+					   loop: {
+						   type: 'bool',
+						   default: true,
+					   },
+					   reducedMotionFallback: {
+						   type: 'string',
+						   enum: [ 'no-change', 'show-last-frame', 'hide' ],
+						   default: 'hide',
+						   description: 'Fallback for prefers-reduced-motion users',
+					   },
+				   },
+			   },
+			   lottieFile: {
+				   type: 'number',
+			   },
+		   },
+	   };
 }
 
 addFilter(
