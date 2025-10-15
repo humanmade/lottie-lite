@@ -138,80 +138,79 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	// Remove animation and clean up observers/instances
 	function removeAnimation() {
-		if (observer) {
-			observer.unobserve(lottie);
+		if ( observer ) {
+			observer.unobserve( lottie );
 		}
-		if (dotLottie) {
+		if ( dotLottie ) {
 			started = false;
 			loaded = false;
 			dotLottie.destroy();
 		}
 	}
 
-	// Set up the animation for the current breakpoint
 	function setAnimation() {
 		let breakpoint = null;
 
-		config.breakpoints.forEach((bp) => {
+		config.breakpoints.forEach( ( bp ) => {
 			if (bp.minWidth < window.innerWidth) {
 				breakpoint = bp;
 			}
-		});
+		} );
 
-		if (breakpoint && current.src !== breakpoint.src) {
+		if ( breakpoint && current.src !== breakpoint.src ) {
 			current = breakpoint;
 
 			removeAnimation();
 
 			// Extract intrinsic width & height
-			if (current.width && current.height) {
+			if ( current.width && current.height ) {
 				canvas.style.aspectRatio = `${breakpoint.width} / ${breakpoint.height}`;
 			} else {
 				const dims = canvas.getBoundingClientRect();
-				canvas.style.aspectRatio = `${dims.width} / ${dims.height}`;
+				canvas.style.aspectRatio = `${ dims.width } / ${ dims.height }`;
 			}
 
-			dotLottie = new DotLottie({
+			dotLottie = new DotLottie( {
 				canvas,
 				src: current.src,
 				...playerConfig,
-			});
+			} );
 
 			// Set a JS accessible reference on the elements
 			canvas.lottie = dotLottie;
 			lottie.lottie = dotLottie;
 
-			if (observer) {
-				observer.observe(lottie);
+			if ( observer ) {
+				observer.observe( lottie );
 			}
 
 			// Add a styling hook
 			canvas.className = img.className || '';
-			lottie.classList.add('lottie-initialized');
+			lottie.classList.add( 'lottie-initialized' );
 
-			if (config.trigger === 'click') {
-				img.parentElement.addEventListener('click', () => {
+			if ( config.trigger === 'click' ) {
+				img.parentElement.addEventListener( 'click', () => {
 					dotLottie.play();
-				});
+				} );
 			}
 
-			if (config.trigger === 'hover') {
-				img.parentElement.addEventListener('mouseenter', () => {
-					dotLottie.setMode('forward');
+			if ( config.trigger === 'hover' ) {
+				img.parentElement.addEventListener( 'mouseenter', () => {
+					dotLottie.setMode( 'forward' );
 					dotLottie.play();
-				});
-				img.parentElement.addEventListener('mouseleave', () => {
-					dotLottie.setMode('reverse');
+				} );
+				img.parentElement.addEventListener( 'mouseleave', () => {
+					dotLottie.setMode( 'reverse' );
 					dotLottie.play();
-				});
+				} );
 			}
 
-			lottie.dispatchEvent(new CustomEvent('lottieReady'));
+			lottie.dispatchEvent( new CustomEvent( 'lottieReady' ) );
 		}
 
-		if (!breakpoint) {
+		if ( ! breakpoint ) {
 			removeAnimation();
-			lottie.classList.remove('lottie-img-hidden');
+			lottie.classList.remove( 'lottie-img-hidden' );
 		}
 	}
 
@@ -225,19 +224,19 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 } );
 
 // Detects if GSAP and ScrollTrigger are available
-function loadGSAPScrollTrigger(cb) {
-	if (window.gsap && window.ScrollTrigger) {
-		cb(window.gsap, window.ScrollTrigger);
+function loadGSAPScrollTrigger( cb ) {
+	if ( window.gsap && window.ScrollTrigger ) {
+		cb( window.gsap, window.ScrollTrigger );
 		return;
 	}
 	
 	let tries = 0;
 	const interval = setInterval(() => {
-		if (window.gsap && window.ScrollTrigger) {
-			clearInterval(interval);
-			cb(window.gsap, window.ScrollTrigger);
-		} else if (++tries > 20) {
-			clearInterval(interval);
+		if ( window.gsap && window.ScrollTrigger ) {
+			clearInterval( interval );
+			cb( window.gsap, window.ScrollTrigger );
+		} else if ( ++tries > 20 ) {
+			clearInterval( interval );
 		}
 	}, 200);
 }
