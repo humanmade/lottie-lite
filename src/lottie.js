@@ -152,7 +152,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		let breakpoint = null;
 
 		config.breakpoints.forEach( ( bp ) => {
-			if (bp.minWidth < window.innerWidth) {
+			if ( bp.minWidth < window.innerWidth ) {
 				breakpoint = bp;
 			}
 		} );
@@ -162,9 +162,9 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 			removeAnimation();
 
-			// Extract intrinsic width & height
+			// Extract intrinsic width & height.
 			if ( current.width && current.height ) {
-				canvas.style.aspectRatio = `${breakpoint.width} / ${breakpoint.height}`;
+				canvas.style.aspectRatio = `${ breakpoint.width } / ${ breakpoint.height }`;
 			} else {
 				const dims = canvas.getBoundingClientRect();
 				canvas.style.aspectRatio = `${ dims.width } / ${ dims.height }`;
@@ -176,7 +176,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 				...playerConfig,
 			} );
 
-			// Set a JS accessible reference on the elements
+			// Set a JS accessible reference on the elements.
 			canvas.lottie = dotLottie;
 			lottie.lottie = dotLottie;
 
@@ -184,7 +184,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 				observer.observe( lottie );
 			}
 
-			// Add a styling hook
+			// Add a styling hook.
 			canvas.className = img.className || '';
 			lottie.classList.add( 'lottie-initialized' );
 
