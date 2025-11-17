@@ -12,11 +12,11 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	// Accessibility: Detect prefers-reduced-motion
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	// Option: config.reducedMotionFallback: 'no-change' | 'show-last-frame' | 'hide'
+	// Option: config.reducedMotionFallback: 'no-change' | 'show-first-frame' | 'show-last-frame' | 'hide'
 	// Default: 'hide' (for backward compatibility)
 	const fallback = config.reducedMotionFallback || 'hide';
 	if (prefersReducedMotion) {
-		if (fallback === 'show-last-frame') {
+		if (fallback === 'show-first-frame' || fallback === 'show-last-frame') {
 			lottie.classList.add('lottie-img-hidden');
 			lottie.classList.add('lottie-lite-reduced-motion-container');
 			const canvas = document.createElement('canvas');
@@ -40,8 +40,13 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 					loop: false,
 				});
 				dotLottie.addEventListener('load', () => {
-					const lastFrame = dotLottie.totalFrames - 1;
-					dotLottie.setFrame(lastFrame);
+                    if ( fallback === 'show-first-frame' ) {
+                        const firstFrame = 0;
+                        dotLottie.setFrame(firstFrame);
+                    } else if ( fallback === 'show-last-frame' ) {
+                        const lastFrame = dotLottie.totalFrames - 1;
+                        dotLottie.setFrame(lastFrame);
+                    }
 					dotLottie.pause();
 				});
 			}
