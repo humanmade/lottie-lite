@@ -112,7 +112,7 @@ function LottieAnimationPanel( BlockEdit ) {
 							}
 						/>
 						<SelectControl
-							label={ __( 'Reduced animation fallback', 'lottie-lite' ) }
+							label={ __( 'Reduced motion fallback', 'lottie-lite' ) }
 							value={ lottie?.reducedMotionFallback || 'hide' }
 							options={ [
 								{
