@@ -24,9 +24,11 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			lottie.classList.add('lottie-lite-reduced-motion-container');
 			const canvas = document.createElement('canvas');
 			canvas.id = config.id;
-			canvas.className = (img.className || '') + ' lottie-lite-reduced-motion-canvas';
-			canvas.style.width = img.style.width || '100%';
+
+            canvas.style.opacity = '1 !important';
+            canvas.style.width = img.style.width || '100%';
 			canvas.style.height = img.style.height || '100%';
+
 			img.parentElement.appendChild(canvas);
 			let breakpoint = null;
 			config.breakpoints.forEach((bp) => {
