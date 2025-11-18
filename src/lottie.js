@@ -10,21 +10,25 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		return;
 	}
 
+	// Check if this is a cover block
+	const isCoverBlock = lottie.classList.contains( 'wp-block-cover');
+
 	// Accessibility: Detect prefers-reduced-motion
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	// Option: config.reducedMotionFallback: 'no-change' | 'show-last-frame' | 'hide'
+	// Option: config.reducedMotionFallback: 'no-change' | 'show-first-frame' | 'show-last-frame' | 'hide'
 	// Default: 'hide' (for backward compatibility)
 	const fallback = config.reducedMotionFallback || 'hide';
 	if (prefersReducedMotion) {
-		if (fallback === 'show-last-frame') {
+		if (fallback === 'show-first-frame' || fallback === 'show-last-frame') {
 			lottie.classList.add('lottie-img-hidden');
 			lottie.classList.add('lottie-lite-reduced-motion-container');
 			const canvas = document.createElement('canvas');
 			canvas.id = config.id;
-			canvas.setAttribute('aria-hidden', 'true');
-			canvas.className = (img.className || '') + ' lottie-lite-reduced-motion-canvas';
+
+			canvas.style.opacity = 1.0;
 			canvas.style.width = img.style.width || '100%';
 			canvas.style.height = img.style.height || '100%';
+
 			img.parentElement.appendChild(canvas);
 			let breakpoint = null;
 			config.breakpoints.forEach((bp) => {
@@ -40,8 +44,13 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 					loop: false,
 				});
 				dotLottie.addEventListener('load', () => {
-					const lastFrame = dotLottie.totalFrames - 1;
-					dotLottie.setFrame(lastFrame);
+					if ( fallback === 'show-first-frame' ) {
+						const firstFrame = 0;
+						dotLottie.setFrame(firstFrame);
+					} else if ( fallback === 'show-last-frame' ) {
+						const lastFrame = dotLottie.totalFrames - 1;
+						dotLottie.setFrame(lastFrame);
+					}
 					dotLottie.pause();
 				});
 			}
@@ -51,13 +60,12 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			// Show static image, do not initialize animation
 			lottie.classList.remove('lottie-img-hidden');
 			return;
-		}	}
+		}
+	}
 
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
 	canvas.id = config.id;
-	// Accessibility: Hide animation from assistive tech
-	canvas.setAttribute('aria-hidden', 'true');
 
 	const isLazy = img.loading === 'lazy';
 
@@ -71,7 +79,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	let playerConfig = {
 		mode: 'forward',
-		autoplay: !config.trigger || config.trigger === 'autoplay',
+		autoplay: !config.trigger || config.trigger === '',
 		loop: false,
 	};
 

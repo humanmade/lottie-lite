@@ -83,6 +83,7 @@ function LottieAnimationPanel( BlockEdit ) {
 						initialOpen={ !! lottie?.breakpoints?.length }
 						icon={
 							<img
+                                alt={ __('Lottie Logo', 'lottie-lite') }
 								src={ LottieLogo }
 								style={ { width: '1.1em', height: '1.1em' } }
 							/>
@@ -112,12 +113,16 @@ function LottieAnimationPanel( BlockEdit ) {
 							}
 						/>
 						<SelectControl
-							label={ __( 'Reduced animation fallback', 'lottie-lite' ) }
+							label={ __( 'Reduced motion fallback', 'lottie-lite' ) }
 							value={ lottie?.reducedMotionFallback || 'hide' }
 							options={ [
 								{
 									label: __( 'No change (always show animation)', 'lottie-lite' ),
 									value: 'no-change',
+								},
+								{
+									label: __( 'Show first frame (static)', 'lottie-lite' ),
+									value: 'show-first-frame',
 								},
 								{
 									label: __( 'Show last frame (static)', 'lottie-lite' ),
