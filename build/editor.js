@@ -525,7 +525,7 @@ function addAttribute(settings) {
           },
           reducedMotionFallback: {
             type: 'string',
-            enum: ['no-change', 'show-last-frame', 'hide'],
+            enum: ['no-change', 'show-first-frame', 'show-last-frame', 'hide'],
             default: 'hide',
             description: 'Fallback for prefers-reduced-motion users'
           }
