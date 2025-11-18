@@ -24,7 +24,6 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			lottie.classList.add('lottie-lite-reduced-motion-container');
 			const canvas = document.createElement('canvas');
 			canvas.id = config.id;
-			canvas.setAttribute('aria-hidden', 'true');
 			canvas.className = (img.className || '') + ' lottie-lite-reduced-motion-canvas';
 			canvas.style.width = img.style.width || '100%';
 			canvas.style.height = img.style.height || '100%';
@@ -65,8 +64,6 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
 	canvas.id = config.id;
-	// Accessibility: Hide animation from assistive tech
-	canvas.setAttribute('aria-hidden', 'true');
 
 	const isLazy = img.loading === 'lazy';
 
