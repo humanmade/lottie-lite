@@ -125,7 +125,7 @@ document.querySelectorAll('[data-lottie]').forEach(lottie => {
       lottie.classList.add('lottie-lite-reduced-motion-container');
       const canvas = document.createElement('canvas');
       canvas.id = config.id;
-      canvas.style.opacity = '1 !important';
+      canvas.style.opacity = 1.0;
       canvas.style.width = img.style.width || '100%';
       canvas.style.height = img.style.height || '100%';
       img.parentElement.appendChild(canvas);
