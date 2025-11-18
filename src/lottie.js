@@ -79,7 +79,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	let playerConfig = {
 		mode: 'forward',
-		autoplay: !config.trigger || config.trigger === 'autoplay',
+		autoplay: !config.trigger || config.trigger === '',
 		loop: false,
 	};
 
