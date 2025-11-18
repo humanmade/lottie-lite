@@ -10,6 +10,9 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		return;
 	}
 
+    // Check if this is a cover block
+	const isCoverBlock = lottie.classList.contains( 'wp-block-cover');
+
 	// Accessibility: Detect prefers-reduced-motion
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	// Option: config.reducedMotionFallback: 'no-change' | 'show-first-frame' | 'show-last-frame' | 'hide'
@@ -56,7 +59,8 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			// Show static image, do not initialize animation
 			lottie.classList.remove('lottie-img-hidden');
 			return;
-		}	}
+		}
+    }
 
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
