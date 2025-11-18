@@ -301,6 +301,7 @@ function LottieAnimationPanel(BlockEdit) {
           title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Lottie Animation', 'lottie-lite'),
           initialOpen: !!lottie?.breakpoints?.length,
           icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("img", {
+            alt: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Lottie Logo', 'lottie-lite'),
             src: _assets_lottie_logo_png__WEBPACK_IMPORTED_MODULE_6__,
             style: {
               width: '1.1em',

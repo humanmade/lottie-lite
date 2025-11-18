@@ -83,6 +83,7 @@ function LottieAnimationPanel( BlockEdit ) {
 						initialOpen={ !! lottie?.breakpoints?.length }
 						icon={
 							<img
+                                alt={ __('Lottie Logo', 'lottie-lite') }
 								src={ LottieLogo }
 								style={ { width: '1.1em', height: '1.1em' } }
 							/>
