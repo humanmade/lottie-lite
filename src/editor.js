@@ -119,7 +119,7 @@ function LottieAnimationPanel( BlockEdit ) {
 									label: __( 'No change (always show animation)', 'lottie-lite' ),
 									value: 'no-change',
 								},
-                                {
+								{
 									label: __( 'Show first frame (static)', 'lottie-lite' ),
 									value: 'show-first-frame',
 								},

@@ -10,7 +10,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		return;
 	}
 
-    // Check if this is a cover block
+	// Check if this is a cover block
 	const isCoverBlock = lottie.classList.contains( 'wp-block-cover');
 
 	// Accessibility: Detect prefers-reduced-motion
@@ -25,8 +25,8 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			const canvas = document.createElement('canvas');
 			canvas.id = config.id;
 
-            canvas.style.opacity = '1 !important';
-            canvas.style.width = img.style.width || '100%';
+			canvas.style.opacity = '1 !important';
+			canvas.style.width = img.style.width || '100%';
 			canvas.style.height = img.style.height || '100%';
 
 			img.parentElement.appendChild(canvas);
@@ -44,13 +44,13 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 					loop: false,
 				});
 				dotLottie.addEventListener('load', () => {
-                    if ( fallback === 'show-first-frame' ) {
-                        const firstFrame = 0;
-                        dotLottie.setFrame(firstFrame);
-                    } else if ( fallback === 'show-last-frame' ) {
-                        const lastFrame = dotLottie.totalFrames - 1;
-                        dotLottie.setFrame(lastFrame);
-                    }
+					if ( fallback === 'show-first-frame' ) {
+						const firstFrame = 0;
+						dotLottie.setFrame(firstFrame);
+					} else if ( fallback === 'show-last-frame' ) {
+						const lastFrame = dotLottie.totalFrames - 1;
+						dotLottie.setFrame(lastFrame);
+					}
 					dotLottie.pause();
 				});
 			}
@@ -61,7 +61,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 			lottie.classList.remove('lottie-img-hidden');
 			return;
 		}
-    }
+	}
 
 	// Create canvas.
 	const canvas = document.createElement( 'canvas' );
