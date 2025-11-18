@@ -1,1 +1,27 @@
-.lottie-lite__panel{border-bottom:1px solid silver;margin:0 0 10px;padding:0 0 10px}.lottie-lite__label{box-sizing:border-box;color:#1e1e1e;display:block;font-size:11px;font-weight:500;line-height:1.4;max-width:100%;overflow:hidden;padding-bottom:0;padding-top:0;text-overflow:ellipsis;text-transform:uppercase;white-space:nowrap}
+/*!********************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/editor.css ***!
+  \********************************************************************************************************************************************************************/
+.lottie-lite__panel {
+	padding: 0 0 10px;
+	margin: 0 0 10px;
+	border-bottom: 1px solid #c0c0c0;
+}
+
+.lottie-lite__label {
+	color: rgb(30, 30, 30);
+	font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    display: block;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/*# sourceMappingURL=editor.css.map*/
