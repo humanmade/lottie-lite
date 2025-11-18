@@ -104,12 +104,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lottie_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lottie.css */ "./src/lottie.css");
 
 
+function createCanvas(config = {}) {
+  const canvas = document.createElement('canvas');
+  canvas.id = config.id;
+
+  // If the fallback image has no alt text, it's decorative
+  if (config.alt === '') {
+    canvas.ariaHidden = true;
+  }
+  return canvas;
+}
 document.querySelectorAll('[data-lottie]').forEach(lottie => {
   const config = JSON.parse(lottie.dataset.lottie);
   const img = lottie.querySelector('img');
   if (!img) {
     return;
   }
+  config.alt = img.alt.trim();
 
   // Check if this is a cover block
   const isCoverBlock = lottie.classList.contains('wp-block-cover');
@@ -123,8 +134,7 @@ document.querySelectorAll('[data-lottie]').forEach(lottie => {
     if (fallback === 'show-first-frame' || fallback === 'show-last-frame') {
       lottie.classList.add('lottie-img-hidden');
       lottie.classList.add('lottie-lite-reduced-motion-container');
-      const canvas = document.createElement('canvas');
-      canvas.id = config.id;
+      const canvas = createCanvas(config);
       canvas.style.opacity = 1.0;
       canvas.style.width = img.style.width || '100%';
       canvas.style.height = img.style.height || '100%';
@@ -163,8 +173,7 @@ document.querySelectorAll('[data-lottie]').forEach(lottie => {
   }
 
   // Create canvas.
-  const canvas = document.createElement('canvas');
-  canvas.id = config.id;
+  const canvas = createCanvas(config);
   const isLazy = img.loading === 'lazy';
 
   // Append - ensure if a link is used the canvas is inside to pick up clickable area.
