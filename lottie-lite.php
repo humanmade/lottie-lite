@@ -62,24 +62,25 @@ add_action( 'init', function () {
 		[],
 		$asset['version']
 	);
-	wp_enqueue_block_style(
-		'core/image',
-		[
-			'handle' => 'lottie-lite',
-		]
+
+	/**
+	 * Filters the list of blocks that support Lottie animations.
+	 *
+	 * @param array $blocks Array of block names that support Lottie.
+	 */
+	$supported_blocks = apply_filters(
+		'lottie_lite_supported_blocks',
+		[ 'core/image', 'core/cover', 'core/media-text' ]
 	);
-	wp_enqueue_block_style(
-		'core/cover',
-		[
-			'handle' => 'lottie-lite',
-		]
-	);
-	wp_enqueue_block_style(
-		'core/media-text',
-		[
-			'handle' => 'lottie-lite',
-		]
-	);
+
+	foreach ( $supported_blocks as $block ) {
+		wp_enqueue_block_style(
+			$block,
+			[
+				'handle' => 'lottie-lite',
+			]
+		);
+	}
 } );
 
 /**
