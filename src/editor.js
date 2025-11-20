@@ -2,13 +2,16 @@ import { useCallback, useRef } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { InspectorControls, MediaUpload, MediaUploadCheck, } from '@wordpress/block-editor';
 import { Button, PanelBody, PanelRow, RangeControl, SelectControl, ToggleControl, } from '@wordpress/components';
-import { addFilter } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 import { DotLottie } from '@lottiefiles/dotlottie-web';
 import LottieLogo from '../assets/lottie-logo.png';
 
 import './editor.css';
 
-const SUPPORTED_BLOCKS = [ 'core/image', 'core/cover', 'core/media-text' ];
+const SUPPORTED_BLOCKS = applyFilters(
+	'lottie-lite.supported-blocks',
+	[ 'core/image', 'core/cover', 'core/media-text' ]
+);
 
 function useLottie( args = {} ) {
 	const dotLottie = useRef( null );
