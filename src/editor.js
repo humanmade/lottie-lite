@@ -8,10 +8,16 @@ import LottieLogo from '../assets/lottie-logo.png';
 
 import './editor.css';
 
-const SUPPORTED_BLOCKS = applyFilters(
-	'lottie-lite.supported-blocks',
-	[ 'core/image', 'core/cover', 'core/media-text' ]
-);
+/**
+ * Get the list of blocks that support Lottie animations
+ * Applies filters to allow themes/plugins to extend support
+ */
+function getSupportedBlocks() {
+	return applyFilters(
+		'lottie-lite.supported-blocks',
+		[ 'core/image', 'core/cover', 'core/media-text' ]
+	);
+}
 
 function useLottie( args = {} ) {
 	const dotLottie = useRef( null );
@@ -60,7 +66,7 @@ function LottieAnimationPanel( BlockEdit ) {
 	return ( props ) => {
 		const { attributes, name, setAttributes } = props;
 
-		if ( SUPPORTED_BLOCKS.indexOf( name ) < 0 ) {
+		if ( getSupportedBlocks().indexOf( name ) < 0 ) {
 			return <BlockEdit {...props} />;
 		}
 
@@ -351,7 +357,7 @@ addFilter(
 );
 
 function addAttribute( settings ) {
-	if ( SUPPORTED_BLOCKS.indexOf( settings.name ) < 0 ) {
+	if ( getSupportedBlocks().indexOf( settings.name ) < 0 ) {
 		return settings;
 	}
 
