@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Lottie Lite
  * Description: Extends image blocks with support for Lottie Animations.
- * Version: 1.2.9
+ * Version: 1.2.10
  * Author: Human Made Limited
  * Author URI: https://humanmade.com
  * License: GPL-2.0+
@@ -89,7 +89,7 @@ add_action( 'init', function () {
  * @param array $block The parsed block.
  * @return string The block content.
  */
-add_filter( 'render_block', function( string $block_content, array $block ) : string {
+add_filter( 'render_block', static function( string $block_content, array $block ) : string {
 	if ( empty( $block['attrs']['lottie'] ) || empty( $block['attrs']['lottie']['breakpoints'] ) ) {
 		return $block_content;
 	}
@@ -116,6 +116,9 @@ add_filter( 'render_block', function( string $block_content, array $block ) : st
 	$block = new WP_HTML_Tag_Processor( $block_content );
 	if ( $block->next_tag() ) {
 		$block->set_attribute( 'data-lottie', wp_json_encode( $data ) );
+		if ( empty( $data['overlay'] ) ) {
+			$block->add_class( 'lottie-img-hidden' );
+		}
 	}
 
 	return (string) $block;
