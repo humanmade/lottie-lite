@@ -7,6 +7,10 @@
 	visibility: hidden;
 }
 
+.no-js [class*="wp-block-"][data-lottie].lottie-img-hidden img {
+	visibility: visible;
+}
+
 [class*="wp-block-"][data-lottie] canvas {
 	opacity: 0;
 	position: absolute;
