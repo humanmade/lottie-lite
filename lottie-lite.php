@@ -95,6 +95,12 @@ add_filter( 'render_block', function( string $block_content, array $block ) : st
 		return $block_content;
 	}
 
+	// Allow themes/plugins to exclude specific blocks from lottie-lite's automatic handling
+	$excluded_blocks = apply_filters( 'lottie_lite_excluded_blocks', [] );
+	if ( in_array( $block['blockName'], $excluded_blocks, true ) ) {
+		return $block_content;
+	}
+
 	// Only enqueue if we have a lottie file.
 	wp_enqueue_script( 'lottie-lite' );
 
@@ -129,12 +135,12 @@ add_filter( 'render_block', function( string $block_content, array $block ) : st
  * @return array Updated list of allowed mime types.
  */
 add_filter( 'upload_mimes', function( $mime_types ) {
-	$mime_types['json'] = 'text/plain'; // This is needed to allow uploading the file type.
+	$mime_types['json'] = 'application/json';
 	$mime_types['lottie'] = 'application/zip';
 	return $mime_types;
 } );
 add_filter( 'mime_types', function( $mime_types ) {
-	$mime_types['json'] = 'text/plain';
+	$mime_types['json'] = 'application/json';
 	$mime_types['lottie'] = 'application/zip';
 	return $mime_types;
 } );
@@ -143,6 +149,33 @@ add_filter( 'ext2type', function( $types ) {
 	$types['code'][] = 'json';
 	return $types;
 } );
+
+/**
+ * Allow JSON and Lottie files to bypass WordPress security checks
+ *
+ * @param array  $file     File data.
+ * @param string $filename File name.
+ * @param array  $mimes    Allowed mime types.
+ * @param string $real_mime Actual mime type of the file.
+ * @return array Modified file data.
+ */
+add_filter( 'wp_check_filetype_and_ext', function( $file, $filename, $mimes, $real_mime ) {
+	if ( ! $file['ext'] || ! $file['type'] ) {
+		$ext = pathinfo( $filename, PATHINFO_EXTENSION );
+
+		if ( $ext === 'json' ) {
+			$file['ext'] = 'json';
+			$file['type'] = 'application/json';
+		}
+
+		if ( $ext === 'lottie' ) {
+			$file['ext'] = 'lottie';
+			$file['type'] = 'application/zip';
+		}
+	}
+
+	return $file;
+}, 10, 4 );
 
 /**
  * Filters the attachment data prepared for JavaScript.
@@ -186,12 +219,6 @@ add_filter( 'wp_generate_attachment_metadata', function( array $metadata, int $a
 			$metadata['width'] = absint( $json_data->w );
 			$metadata['height'] = absint( $json_data->h );
 		}
-
-		// Ensure correct mime type is set after our text/plain hack.
-		wp_update_post( [
-			'ID' => $attachment_id,
-			'post_mime_type' => 'application/json',
-		] );
 	}
 
 	if ( $ext === 'lottie' ) {
