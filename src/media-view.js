@@ -1,6 +1,8 @@
+/* eslint object-shorthand: "off", no-unused-expressions: "off" */
+
 import { DotLottie } from '@lottiefiles/dotlottie-web';
 
-var AttachmentView = wp.media.view.Attachment.Library;
+const AttachmentView = wp.media.view.Attachment.Library;
 wp.media.view.Attachment.Library = AttachmentView.extend( {
 	render: function () {
 		AttachmentView.prototype.render.apply( this, arguments );
@@ -42,7 +44,7 @@ wp.media.view.Attachment.Library = AttachmentView.extend( {
 	},
 } );
 
-var DetailsView = wp.media.view.Attachment.Details;
+const DetailsView = wp.media.view.Attachment.Details;
 wp.media.view.Attachment.Details = DetailsView.extend( {
 	render: function () {
 		DetailsView.prototype.render.apply( this, arguments );
