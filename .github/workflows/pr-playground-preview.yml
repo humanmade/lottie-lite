@@ -36,25 +36,12 @@ jobs:
                   # Create and checkout a new branch for this PR's built files
                   BRANCH_NAME="pr-${{ github.event.pull_request.number }}-built"
 
-                  # Check if the branch exists on remote
-                  if git ls-remote --heads origin "$BRANCH_NAME" | grep -q "$BRANCH_NAME"; then
-                    # Branch exists, fetch and checkout
-                    git fetch origin "$BRANCH_NAME"
-                    git checkout "$BRANCH_NAME"
+                  # Create/recreate the branch from current state
+                  git checkout -B "$BRANCH_NAME"
 
-                    # Reset to the PR's HEAD and copy over the built files
-                    git checkout ${{ github.event.pull_request.head.sha }} -- .
-
-                    # Re-run build to ensure we have fresh built files
-                    npm run build
-                  else
-                    # Branch doesn't exist, create it
-                    git checkout -b "$BRANCH_NAME"
-                  fi
-
-                  # Add all files including built assets
+                  # Add all files including built assets and any lock file changes
                   git add -f build/
-                  git add .
+                  git add -A
 
                   # Commit if there are changes
                   if git diff --staged --quiet; then
