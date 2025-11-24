@@ -18,6 +18,15 @@ jobs:
           ref: ${{ github.event.release.tag_name }}
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm i
+
       - name: Get version from tag
         id: get_version
         run: |
@@ -35,6 +44,9 @@ jobs:
           sed -i "s/__VERSION__/${{ steps.get_version.outputs.version }}/g" lottie-lite.php
           echo "Updated plugin header:"
           cat lottie-lite.php | grep "Version:"
+
+      - name: Build plugin
+        run: npm run build
 
       - name: Commit version changes to tag
         run: |
@@ -54,40 +66,15 @@ jobs:
 
       - name: Create ZIP archive
         run: |
-          mkdir -p release
-
-          # Create a clean copy excluding dev files
-          rsync -av --exclude='.git' \
-                    --exclude='.github' \
-                    --exclude='node_modules' \
-                    --exclude='src' \
-                    --exclude='tests' \
-                    --exclude='release' \
-                    --exclude='.gitignore' \
-                    --exclude='.gitattributes' \
-                    --exclude='.editorconfig' \
-                    --exclude='.wp-env' \
-                    --exclude='.wp-env.json' \
-                    --exclude='playwright.config.js' \
-                    --exclude='package.json' \
-                    --exclude='package-lock.json' \
-                    --exclude='composer.json' \
-                    --exclude='CLAUDE.md' \
-                    --exclude='README.md' \
-                    ./ release/lottie-lite/
-
-          # Create ZIP
-          cd release
-          zip -r "lottie-lite-${{ steps.get_version.outputs.tag }}.zip" lottie-lite/
-          cd ..
-
-          echo "Created: release/lottie-lite-${{ steps.get_version.outputs.tag }}.zip"
+          npm run plugin-zip
+          mv lottie-lite.zip "lottie-lite-${{ steps.get_version.outputs.tag }}.zip"
+          echo "Created: lottie-lite-${{ steps.get_version.outputs.tag }}.zip"
 
       - name: Upload ZIP to release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.release.tag_name }}
           files: |
-            release/lottie-lite-${{ steps.get_version.outputs.tag }}.zip
+            lottie-lite-${{ steps.get_version.outputs.tag }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

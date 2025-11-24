@@ -13,12 +13,46 @@ The plugin uses GitHub Actions to automate version management, testing, and rele
 
 ## PR Preview Workflow
 
-When you open a pull request:
+The plugin uses a two-stage PR preview system for security and compatibility with fork PRs:
 
-1. The PR preview workflow builds the plugin
-2. A "Try it in Playground" button is added to the PR description
-3. Reviewers can test changes in their browser without any local setup
-4. The preview uses WordPress 6.8 with PHP 8.3
+### How It Works
+
+1. **Build Stage** (`pr-playground-preview-build.yml`):
+   - Runs when a PR is opened or updated
+   - Has read-only permissions (safe for external contributions)
+   - Checks out code, installs dependencies, and builds the plugin
+   - Creates a distributable ZIP excluding development files
+   - Uploads the ZIP as a workflow artifact
+
+2. **Publish Stage** (`pr-playground-preview-publish.yml`):
+   - Triggers automatically when the build completes successfully
+   - Has write permissions to expose artifacts and update PR descriptions
+   - Downloads the artifact and publishes it to a draft release
+   - Automatically publishes the draft release as a pre-release (first time only)
+   - Generates a Playground blueprint with the plugin URL
+   - Adds a "Try it in Playground" button to the PR description
+
+3. **Testing**:
+   - Reviewers click the button to test changes in their browser
+   - No local setup required
+   - Uses WordPress 6.8 with PHP 8.3
+
+### Automatic Setup
+
+The workflow automatically handles the one-time setup:
+- The first time a PR is created, the workflow creates a draft release named `playground-builds`
+- The workflow automatically publishes this as a pre-release
+- Future PRs work immediately with no manual intervention required
+
+The preview button will work right away for all PRs.
+
+### Why Two Workflows?
+
+This separation is required for security when accepting PRs from forks:
+- Fork PRs cannot access repository secrets or write permissions
+- The build workflow runs untrusted code with minimal permissions
+- The publish workflow only runs trusted code with elevated permissions
+- This pattern allows safe PR previews from any contributor
 
 This makes code review and testing much easier for both developers and reviewers.
 

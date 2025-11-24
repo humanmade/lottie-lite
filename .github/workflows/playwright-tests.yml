@@ -38,8 +38,7 @@ jobs:
           npx @wp-playground/cli server \
             --blueprint=blueprint.json \
             --port=9400 \
-            --php=8.3 \
-            --wp=6.8 &
+            --auto-mount &
           echo "PLAYGROUND_PID=$!" >> $GITHUB_ENV
         env:
           CI: true

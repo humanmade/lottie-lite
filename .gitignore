@@ -4,6 +4,7 @@
 
 # Build output
 /build/
+*.zip
 
 # Logs
 npm-debug.log*

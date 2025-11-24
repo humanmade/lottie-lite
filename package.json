@@ -9,6 +9,7 @@
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style --fix",
 		"lint:js": "wp-scripts lint-js",
+		"plugin-zip": "wp-scripts plugin-zip",
 		"playground:start": "npx @wp-playground/cli server --blueprint=blueprint.json --port=9400 --auto-mount",
 		"test:e2e": "wp-scripts test-playwright",
 		"test:e2e:debug": "wp-scripts test-playwright --debug",
