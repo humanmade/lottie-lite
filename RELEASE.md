@@ -19,6 +19,7 @@ The plugin uses a simple branch-based PR preview system:
 
 1. **Build to Branch**:
    - When a PR is opened or updated, the workflow runs
+   - Replaces `__VERSION__` with "Pull Request #123 - PR Title" (example)
    - Installs dependencies and builds the plugin
    - Pushes built files to a branch named `pr-{number}-built`
    - Similar to how the main `build-and-release` workflow works
@@ -36,7 +37,7 @@ The plugin uses a simple branch-based PR preview system:
 
 ### Branch Cleanup
 
-PR branches (`pr-{number}-built`) are automatically updated with each push to the PR. You can manually delete these branches after PRs are merged or closed to keep the repository clean.
+PR branches (`pr-{number}-built`) are automatically updated with each push to the PR. When the PR is closed (merged or not), the cleanup workflow automatically deletes the preview branch to keep the repository clean.
 
 This approach is simpler than artifact-based previews and leverages GitHub's native branch archive feature.
 

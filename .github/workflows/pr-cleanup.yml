@@ -1,0 +1,27 @@
+name: PR Cleanup
+
+on:
+    pull_request:
+        types: [closed]
+
+permissions:
+    contents: write
+
+jobs:
+    cleanup:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Delete PR preview branch
+              run: |
+                  BRANCH_NAME="pr-${{ github.event.pull_request.number }}-built"
+
+                  echo "Checking if branch $BRANCH_NAME exists..."
+
+                  # Check if the branch exists on remote
+                  if git ls-remote --heads origin "$BRANCH_NAME" | grep -q "$BRANCH_NAME"; then
+                    echo "Branch $BRANCH_NAME found. Deleting..."
+                    git push origin --delete "$BRANCH_NAME"
+                    echo "Successfully deleted branch $BRANCH_NAME"
+                  else
+                    echo "Branch $BRANCH_NAME does not exist. Nothing to clean up."
+                  fi

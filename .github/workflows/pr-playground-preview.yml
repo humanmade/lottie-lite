@@ -24,6 +24,17 @@ jobs:
             - name: Install dependencies
               run: npm i
 
+            - name: Replace version with PR info
+              run: |
+                  # Create PR version string
+                  PR_VERSION="Pull Request #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}"
+
+                  # Replace __VERSION__ in plugin file
+                  sed -i "s/__VERSION__/$PR_VERSION/g" lottie-lite.php
+
+                  echo "Updated plugin version to: $PR_VERSION"
+                  cat lottie-lite.php | grep "Version:"
+
             - name: Build plugin
               run: npm run build
 

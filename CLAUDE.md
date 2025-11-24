@@ -92,6 +92,7 @@ GitHub Actions workflows automate testing, linting, and releases:
 
 ### PR Preview (`.github/workflows/pr-playground-preview.yml`)
 - Triggers when PRs are opened or updated
+- Replaces `__VERSION__` with "Pull Request #XXX - PR Title" for easy identification
 - Builds the plugin with all assets
 - Pushes built files to a branch named `pr-{number}-built`
 - Generates a Playground blueprint that installs the plugin from GitHub
@@ -100,7 +101,13 @@ GitHub Actions workflows automate testing, linting, and releases:
 - No local setup required
 - Uses WordPress 6.8 with PHP 8.3
 
-The workflow uses the same approach as the build-and-release workflow, pushing built assets to dedicated PR branches. The Playground blueprint installs the plugin directly from the GitHub branch ZIP.
+The workflow uses the same approach as the build-and-release workflow, pushing built assets to dedicated PR branches. The Playground blueprint installs the plugin directly from the GitHub branch ZIP. The plugin version in WordPress will show the PR number and title, making it clear which preview is being tested.
+
+### PR Cleanup (`.github/workflows/pr-cleanup.yml`)
+- Triggers when PRs are closed (merged or not)
+- Automatically deletes the `pr-{number}-built` branch
+- Keeps the repository clean by removing temporary preview branches
+- No manual intervention required
 
 ### Build & Release (`.github/workflows/build-and-release.yml`)
 - Triggers on push to main branch
