@@ -235,8 +235,12 @@ function LottieAnimationPanel( BlockEdit ) {
 									className="lottie-lite__panel"
 								>
 									<PanelRow>
-										<label className="lottie-lite__label">
+										<label
+											className="lottie-lite__label"
+											htmlFor={ `lottie-lite-bp-${ index }` }
+										>
 											{ sprintf(
+												/* translators: %d replaced with current input number value */
 												__(
 													'Breakpoint: Above %dpx',
 													'lottie-lite'
@@ -248,6 +252,7 @@ function LottieAnimationPanel( BlockEdit ) {
 											variant="tertiary"
 											icon="trash"
 											iconSize={ 14 }
+											id={ `lottie-lite-bp-${ index }` }
 											title={ __(
 												'Remove Breakpoint',
 												'lottie-lite'

@@ -1,17 +1,17 @@
+/* global IntersectionObserver, requestAnimationFrame */
+
 import { DotLottie } from '@lottiefiles/dotlottie-web';
 
 import './lottie.css';
 
 document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
-	const config = JSON.parse( lottie.dataset.lottie );
 	const img = lottie.querySelector( 'img' );
 
 	if ( ! img ) {
 		return;
 	}
 
-	// Check if this is a cover block
-	const isCoverBlock = lottie.classList.contains( 'wp-block-cover' );
+	const config = JSON.parse( lottie.dataset.lottie );
 
 	// Accessibility: Detect prefers-reduced-motion
 	const prefersReducedMotion = window.matchMedia(
@@ -20,6 +20,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 	// Option: config.reducedMotionFallback: 'no-change' | 'show-first-frame' | 'show-last-frame' | 'hide'
 	// Default: 'hide' (for backward compatibility)
 	const fallback = config.reducedMotionFallback || 'hide';
+
 	if ( prefersReducedMotion ) {
 		if (
 			fallback === 'show-first-frame' ||
@@ -82,7 +83,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 		lottie.classList.add( 'lottie-img-hidden' );
 	}
 
-	let playerConfig = {
+	const playerConfig = {
 		mode: 'forward',
 		autoplay: ! config.trigger || config.trigger === '',
 		loop: false,
@@ -100,6 +101,9 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 	let dotLottie;
 	let loaded = false;
 	let started = false;
+
+	// Check if this is a cover block
+	const isCoverBlock = lottie.classList.contains( 'wp-block-cover' );
 
 	// Only animate when in view.
 	const observer = new IntersectionObserver(
@@ -125,10 +129,8 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 					if ( dotLottie ) {
 						dotLottie.unfreeze();
 					}
-				} else {
-					if ( dotLottie ) {
-						dotLottie.freeze();
-					}
+				} else if ( dotLottie ) {
+					dotLottie.freeze();
 				}
 			} );
 		},

@@ -16,8 +16,10 @@ npm run build
 npm run start
 
 # Linting
-npm run lint:js
-npm run lint:css --fix
+npm run lint:js        # Check JavaScript
+npm run lint:css       # Check CSS
+npm run lint:js:fix    # Fix JavaScript issues
+npm run lint:css:fix   # Fix CSS issues
 
 # Format code
 npm run format
@@ -72,7 +74,13 @@ Modify the blueprint to change the test environment configuration.
 
 ## CI/CD Pipeline
 
-GitHub Actions workflows automate testing and releases:
+GitHub Actions workflows automate testing, linting, and releases:
+
+### Lint (`.github/workflows/lint.yml`)
+- Triggers on push/PR to main, master, or develop branches
+- Runs JavaScript and CSS linters
+- Ensures code quality and style consistency
+- Fails the build if linting issues are found
 
 ### Playwright Tests (`.github/workflows/playwright-tests.yml`)
 - Triggers on push/PR to main, master, or develop branches
