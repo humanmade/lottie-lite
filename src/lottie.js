@@ -11,54 +11,59 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 	}
 
 	// Check if this is a cover block
-	const isCoverBlock = lottie.classList.contains( 'wp-block-cover');
+	const isCoverBlock = lottie.classList.contains( 'wp-block-cover' );
 
 	// Accessibility: Detect prefers-reduced-motion
-	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const prefersReducedMotion = window.matchMedia(
+		'(prefers-reduced-motion: reduce)'
+	).matches;
 	// Option: config.reducedMotionFallback: 'no-change' | 'show-first-frame' | 'show-last-frame' | 'hide'
 	// Default: 'hide' (for backward compatibility)
 	const fallback = config.reducedMotionFallback || 'hide';
-	if (prefersReducedMotion) {
-		if (fallback === 'show-first-frame' || fallback === 'show-last-frame') {
-			lottie.classList.add('lottie-img-hidden');
-			lottie.classList.add('lottie-lite-reduced-motion-container');
-			const canvas = document.createElement('canvas');
+	if ( prefersReducedMotion ) {
+		if (
+			fallback === 'show-first-frame' ||
+			fallback === 'show-last-frame'
+		) {
+			lottie.classList.add( 'lottie-img-hidden' );
+			lottie.classList.add( 'lottie-lite-reduced-motion-container' );
+			const canvas = document.createElement( 'canvas' );
 			canvas.id = config.id;
 
 			canvas.style.opacity = 1.0;
 			canvas.style.width = img.style.width || '100%';
 			canvas.style.height = img.style.height || '100%';
 
-			img.parentElement.appendChild(canvas);
+			img.parentElement.appendChild( canvas );
 			let breakpoint = null;
-			config.breakpoints.forEach((bp) => {
-				if (bp.minWidth < window.innerWidth) {
+			config.breakpoints.forEach( ( bp ) => {
+				if ( bp.minWidth < window.innerWidth ) {
 					breakpoint = bp;
 				}
-			});
-			if (breakpoint) {
-				const dotLottie = new DotLottie({
+			} );
+			if ( breakpoint ) {
+				const dotLottie = new DotLottie( {
 					canvas,
 					src: breakpoint.src,
 					autoplay: false,
 					loop: false,
-				});
-				dotLottie.addEventListener('load', () => {
+				} );
+				dotLottie.addEventListener( 'load', () => {
 					if ( fallback === 'show-first-frame' ) {
 						const firstFrame = 0;
-						dotLottie.setFrame(firstFrame);
+						dotLottie.setFrame( firstFrame );
 					} else if ( fallback === 'show-last-frame' ) {
 						const lastFrame = dotLottie.totalFrames - 1;
-						dotLottie.setFrame(lastFrame);
+						dotLottie.setFrame( lastFrame );
 					}
 					dotLottie.pause();
-				});
+				} );
 			}
 			return;
 		}
-		if (fallback === 'hide') {
+		if ( fallback === 'hide' ) {
 			// Show static image, do not initialize animation
-			lottie.classList.remove('lottie-img-hidden');
+			lottie.classList.remove( 'lottie-img-hidden' );
 			return;
 		}
 	}
@@ -79,7 +84,7 @@ document.querySelectorAll( '[data-lottie]' ).forEach( ( lottie ) => {
 
 	let playerConfig = {
 		mode: 'forward',
-		autoplay: !config.trigger || config.trigger === '',
+		autoplay: ! config.trigger || config.trigger === '',
 		loop: false,
 	};
 
