@@ -82,26 +82,17 @@ GitHub Actions workflows automate testing and releases:
 - Uploads test results and failure artifacts
 - Posts test summaries as PR comments
 
-### PR Preview (`.github/workflows/pr-playground-preview-*.yml`)
-The PR preview system uses two separate workflows for security:
-
-**Build Workflow** (`pr-playground-preview-build.yml`):
+### PR Preview (`.github/workflows/pr-playground-preview.yml`)
 - Triggers when PRs are opened or updated
-- Runs with read-only permissions (safe for fork PRs)
-- Builds the plugin and creates a distributable ZIP
-- Uploads ZIP as a workflow artifact
-
-**Publish Workflow** (`pr-playground-preview-publish.yml`):
-- Triggers when build workflow completes successfully
-- Runs with write permissions (contents, pull-requests)
-- Exposes the artifact on a public URL via draft release
-- Automatically publishes the draft release as a pre-release (first time only)
+- Builds the plugin with all assets
+- Pushes built files to a branch named `pr-{number}-built`
+- Generates a Playground blueprint that installs the plugin from GitHub
 - Adds an interactive "Try it in Playground" button to PR descriptions
 - Allows reviewers to test changes directly in their browser
 - No local setup required
 - Uses WordPress 6.8 with PHP 8.3
 
-The workflow automatically handles the one-time setup of publishing the draft release, so PR previews work immediately without manual intervention.
+The workflow uses the same approach as the build-and-release workflow, pushing built assets to dedicated PR branches. The Playground blueprint installs the plugin directly from the GitHub branch ZIP.
 
 ### Build & Release (`.github/workflows/build-and-release.yml`)
 - Triggers on push to main branch
