@@ -1,0 +1,19 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Exclude development files from release builds
+/.github export-ignore
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/tests export-ignore
+/src export-ignore
+/node_modules export-ignore
+/blueprint.json export-ignore
+/playwright.config.js export-ignore
+/package.json export-ignore
+/package-lock.json export-ignore
+/composer.json export-ignore
+/CLAUDE.md export-ignore
+/RELEASE.md export-ignore
+/README.md export-ignore
