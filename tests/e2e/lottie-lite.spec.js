@@ -36,7 +36,7 @@ test.describe( 'Lottie Lite Plugin', () => {
 		await page.getByRole( 'link', { name: 'Posts', exact: true } ).click();
 		await page
 			.locator( '#wpbody-content' )
-			.getByRole( 'link', { name: 'Add Post' } )
+			.getByRole( 'link', { name: /Add (New )?Post/ } )
 			.click();
 		await page.getByRole( 'button', { name: 'Close' } ).click();
 		await editor.openDocumentSettingsSidebar();
