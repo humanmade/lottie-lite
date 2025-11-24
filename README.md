@@ -55,7 +55,7 @@ The build process uses `@wordpress/scripts` to compile JavaScript and CSS from `
 
 The plugin uses [Playwright](https://playwright.dev/) for end-to-end testing with [WordPress Playground](https://wordpress.github.io/wordpress-playground/).
 
-#### Running Tests
+#### Running Tests Locally
 
 1. Start the WordPress Playground server (in one terminal):
 ```bash
@@ -68,6 +68,14 @@ npm run test:e2e
 ```
 
 The Playground environment runs on `http://localhost:9400` with WordPress 6.8, PHP 8.3, and auto-login enabled.
+
+#### CI Testing
+
+Tests run automatically on GitHub Actions using a matrix of:
+- **PHP versions**: 8.3, 8.4
+- **WordPress versions**: 6.7, 6.8, latest
+
+This ensures compatibility across multiple PHP and WordPress versions.
 
 #### Adding New Tests
 

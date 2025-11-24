@@ -14,6 +14,14 @@ jobs:
             contents: read
             pull-requests: write
 
+        strategy:
+            fail-fast: false
+            matrix:
+                php: ['8.3', '8.4']
+                wordpress: ['6.7', '6.8', 'latest']
+
+        name: Test PHP ${{ matrix.php }} / WP ${{ matrix.wordpress }}
+
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -37,6 +45,8 @@ jobs:
               run: |
                   npx @wp-playground/cli server \
                     --blueprint=blueprint.json \
+                    --php=${{ matrix.php }} \
+                    --wp=${{ matrix.wordpress }} \
                     --port=9400 \
                     --auto-mount &
                   echo "PLAYGROUND_PID=$!" >> $GITHUB_ENV
@@ -71,7 +81,7 @@ jobs:
               uses: actions/upload-artifact@v4
               if: always()
               with:
-                  name: playwright-report
+                  name: playwright-report-php${{ matrix.php }}-wp${{ matrix.wordpress }}
                   path: test-results/
                   retention-days: 30
                   if-no-files-found: ignore
@@ -80,7 +90,7 @@ jobs:
               uses: actions/upload-artifact@v4
               if: failure()
               with:
-                  name: test-results
+                  name: test-results-php${{ matrix.php }}-wp${{ matrix.wordpress }}
                   path: test-results/
                   retention-days: 7
                   if-no-files-found: ignore

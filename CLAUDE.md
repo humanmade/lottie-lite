@@ -86,8 +86,11 @@ GitHub Actions workflows automate testing, linting, and releases:
 - Triggers on push/PR to main, master, or develop branches
 - Builds the plugin and runs Playwright e2e tests
 - Uses WordPress Playground CLI on port 9400
-- Configured via `blueprint.json` for consistent environments
-- Uploads test results and failure artifacts
+- Tests run in a matrix across multiple versions:
+  - PHP: 8.3, 8.4
+  - WordPress: 6.7, 6.8, latest
+- Configured via `blueprint.json` with version overrides via CLI flags (`--php`, `--wp`)
+- Uploads test results and failure artifacts (named per matrix combination)
 - Posts test summaries as PR comments
 
 ### PR Preview (`.github/workflows/pr-playground-preview.yml`)
