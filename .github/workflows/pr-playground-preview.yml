@@ -1,0 +1,101 @@
+name: PR Playground Preview
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened, edited]
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    build-and-preview:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm i
+
+            - name: Replace version with PR info
+              run: |
+                  # Create PR version string
+                  PR_VERSION="Pull Request #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}"
+
+                  # Replace __VERSION__ in plugin file
+                  sed -i "s/__VERSION__/$PR_VERSION/g" lottie-lite.php
+
+                  echo "Updated plugin version to: $PR_VERSION"
+                  cat lottie-lite.php | grep "Version:"
+
+            - name: Build plugin
+              run: npm run build
+
+            - name: Push built files to PR branch
+              run: |
+                  # Configure git
+                  git config --local user.email "github-actions[bot]@users.noreply.github.com"
+                  git config --local user.name "github-actions[bot]"
+
+                  # Create and checkout a new branch for this PR's built files
+                  BRANCH_NAME="pr-${{ github.event.pull_request.number }}-built"
+
+                  # Create/recreate the branch from current state
+                  git checkout -B "$BRANCH_NAME"
+
+                  # Add all files including built assets and any lock file changes
+                  git add -f build/
+                  git add -A
+
+                  # Commit if there are changes
+                  if git diff --staged --quiet; then
+                    echo "No changes to commit"
+                  else
+                    git commit -m "Build assets for PR #${{ github.event.pull_request.number }} (commit: ${{ github.event.pull_request.head.sha }})"
+                    git push origin "$BRANCH_NAME" --force
+                  fi
+
+            - name: Generate Playground blueprint and post preview button
+              uses: WordPress/action-wp-playground-pr-preview@v2
+              with:
+                  mode: 'append-to-description'
+                  blueprint: |
+                      {
+                        "landingPage": "/wp-admin/",
+                        "preferredVersions": {
+                          "php": "8.3",
+                          "wp": "6.8"
+                        },
+                        "steps": [
+                          {
+                            "step": "login",
+                            "username": "admin",
+                            "password": "password"
+                          },
+                          {
+                            "step": "installTheme",
+                            "themeData": {
+                              "resource": "wordpress.org/themes",
+                              "slug": "twentytwentyfour"
+                            },
+                            "options": {
+                              "activate": true
+                            }
+                          },
+                          {
+                            "step": "installPlugin",
+                            "pluginZipFile": {
+                              "resource": "url",
+                              "url": "https://github.com/${{ github.repository }}/archive/refs/heads/pr-${{ github.event.pull_request.number }}-built.zip"
+                            }
+                          }
+                        ]
+                      }
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
