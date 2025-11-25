@@ -1,2 +1,38 @@
+# Dependencies
 /vendor/
 /node_modules/
+
+# Build output
+/build/
+*.zip
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# WordPress Playground
+.wordpress-playground/
+
+# Test artifacts
+.auth/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Playwright
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

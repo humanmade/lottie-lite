@@ -7,14 +7,24 @@
 		"build": "wp-scripts build src/*.js",
 		"start": "wp-scripts start src/*.js",
 		"format": "wp-scripts format",
-		"lint:css": "wp-scripts lint-style --fix",
+		"lint:css:fix": "wp-scripts lint-style --fix",
+		"lint:js:fix": "wp-scripts lint-js --fix",
+		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"plugin-zip": "wp-scripts plugin-zip",
+		"playground:start": "npx @wp-playground/cli server --blueprint=blueprint.json --port=9400 --auto-mount",
+		"test:e2e": "wp-scripts test-playwright",
+		"test:e2e:debug": "wp-scripts test-playwright --debug",
+		"test:e2e:watch": "wp-scripts test-playwright --watch"
 	},
 	"author": "",
 	"license": "GPL-2.0-or-later",
 	"dependencies": {
 		"@lottiefiles/dotlottie-web": "^0.31.1",
 		"@wordpress/scripts": "^28.6.0"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.49.0",
+		"@wordpress/e2e-test-utils-playwright": "^1.10.0"
 	}
 }
