@@ -20,7 +20,7 @@
 	"author": "",
 	"license": "GPL-2.0-or-later",
 	"dependencies": {
-		"@lottiefiles/dotlottie-web": "^0.31.1",
+		"@lottiefiles/dotlottie-web": "^0.66.2",
 		"@wordpress/scripts": "^28.6.0"
 	},
 	"devDependencies": {
