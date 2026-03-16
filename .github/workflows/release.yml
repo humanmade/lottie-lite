@@ -48,13 +48,15 @@ jobs:
             - name: Build plugin
               run: npm run build
 
-            - name: Commit version changes to tag
+            - name: Commit version and build changes to tag
               run: |
                   git config --local user.email "github-actions[bot]@users.noreply.github.com"
                   git config --local user.name "github-actions[bot]"
 
-                  # Add and commit the versioned file
+                  # Add the versioned file
                   git add lottie-lite.php
+                  # Add built files to make them available to composer via Packagist
+                  git add -f build
                   git commit -m "Update version to ${{ steps.get_version.outputs.version }}"
 
                   # Delete the old tag and create a new one pointing to the new commit
