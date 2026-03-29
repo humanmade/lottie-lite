@@ -140,9 +140,17 @@ add_filter( 'mime_types', function( $mime_types ) {
 	$mime_types['lottie'] = 'application/zip';
 	return $mime_types;
 } );
+
+/**
+ * Register Lottie file types as "images" in WordPress
+ *
+ * @link https://developer.wordpress.org/reference/functions/wp_get_ext_types/
+ * @param array[] $ext2type Multi-dimensional array of file extensions types keyed by the type of file.
+ * @return array[] $ext2type Multi-dimensional array of file extensions types keyed by the type of file.
+ */
 add_filter( 'ext2type', function( $types ) {
-	$types['archive'][] = 'lottie';
-	$types['code'][] = 'json';
+	$types['image'][] = 'lottie';
+	$types['image'][] = 'json';
 	return $types;
 } );
 
